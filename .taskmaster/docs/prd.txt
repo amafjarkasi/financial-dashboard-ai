@@ -1,0 +1,41 @@
+Title: Advanced Analytics & AI Augmentation Roadmap
+
+Objective:
+Elevate the Financial Dashboard into an intelligent 2025-grade analytics cockpit by enriching each core page (Overview, Revenue, Billing, Settings) with deeper metrics, anomaly surfacing, proactive insight scaffolds, and context-fed AI assistance.
+
+Scope Pages:
+1. Revenue Intelligence
+2. Billing & Cash Lifecycle
+3. Settings (governance + personalization)
+4. (Existing Overview acts as aggregation baseline)
+
+Core Enhancements:
+- Visual anomaly markers (revenue vs rolling baseline) with contextual tooltip (deviation %, direction, classification) and inline legend chips to toggle series.
+- Forecast micro‑panel (next 2 months simple Holt-like extrapolation placeholder) and growth decomposition (mix shift vs pure expansion placeholder text + metrics).
+- Billing: DSO (Days Sales Outstanding) synthetic calc, collection velocity sparkline, overdue concentration (top 5 overdue share), predictive risk bucket placeholder.
+- Settings: Feature flag management stub with persistent local storage and dependency note tooltips; audit log preview stub.
+- AI Context Enrichment: Inject channel mix, aging distribution, last 6 anomalies, last 6 invoices summary, synthetic forecast values, and key ratios (ARR growth, Net $ retention, churn trend slope) into AI context object.
+- Smoothing preference & view already persisted (extend to legend toggles & forecast opt‑in flag).
+
+Success Criteria:
+- All new UI elements load with no console errors.
+- Anomaly markers visually distinct (glow ring + subtle pulse) and accessible (aria-label with deviation summary).
+- Tooltip shows anomaly metadata when hovering an anomalous point.
+- Legend chips can hide/show Revenue and Rolling Avg independently without remount jitter.
+- AI answers reflect enriched context (e.g., referencing channel mix % or aging buckets when asked).
+- Persistent user choices: smoothing, hidden series, forecast toggle, feature flags.
+
+Out of Scope (Phase 1):
+- Real ML forecasting
+- Backend persistence
+- Multi-tenant RBAC
+
+Risks:
+- Over-cluttered UI -> mitigate with progressive disclosure (compact chips, collapsible panels)
+- Performance with many markers -> dataset small, acceptable.
+
+Glossary:
+- Rolling Avg: 3-period simple moving average.
+- Anomaly: >18% absolute deviation vs rolling avg.
+
+Timeline: Single sprint incremental delivery.

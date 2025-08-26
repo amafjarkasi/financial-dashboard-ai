@@ -1,0 +1,277 @@
+{
+  "master": {
+    "tasks": [
+      {
+        "id": 1,
+        "title": "Implement Visual Anomaly Markers",
+        "description": "Create visual markers for anomalies in revenue charts with contextual tooltips showing deviation percentage, direction, and classification.",
+        "details": "Enhance the existing revenue chart component to identify data points with >18% absolute deviation from the 3-period rolling average. Add visual indicators (glow ring with subtle pulse animation) to these points. Implement tooltips that appear on hover, displaying the deviation percentage, direction (increase/decrease), and classification. Ensure the markers are accessible with appropriate aria-labels. Use CSS for the glow effect with keyframe animations for the pulse. The tooltip should be positioned above the data point and include formatted text showing the exact deviation value and contextual information.",
+        "testStrategy": "Unit test the anomaly detection logic to ensure it correctly identifies points with >18% deviation. Test the tooltip rendering with mock data to verify correct information display. Verify accessibility by checking aria-labels. Test the visual appearance across browsers to ensure consistent rendering of the glow and pulse effects.",
+        "priority": "high",
+        "dependencies": [],
+        "status": "pending",
+        "subtasks": [
+          {
+            "id": 1,
+            "title": "Implement Anomaly Detection Logic",
+            "description": "Create a utility function to identify data points with >18% absolute deviation from the 3-period rolling average in the revenue chart data.",
+            "dependencies": [],
+            "details": "Create a new utility file `anomalyDetection.js` with a function that takes an array of revenue data points and returns an enhanced array with anomaly flags. Calculate the 3-period rolling average for each point, then compare the actual value against this average to identify deviations >18%. Add properties to each data point: `isAnomaly` (boolean), `deviationPercent` (number), `deviationDirection` (string: 'increase' or 'decrease'), and `classification` (string based on severity). Export this function for use in the chart component.",
+            "status": "pending",
+            "testStrategy": "Write unit tests with Jest to verify the detection logic correctly identifies anomalies. Test edge cases like the first two points (which don't have enough history for a 3-period average), consecutive anomalies, and boundary conditions (exactly 18% deviation)."
+          },
+          {
+            "id": 2,
+            "title": "Create Visual Marker Component with Glow Effect",
+            "description": "Develop a reusable component for rendering anomaly markers with a glowing ring and subtle pulse animation.",
+            "dependencies": [],
+            "details": "Create a new React component `AnomalyMarker.jsx` that renders a circular marker with a glowing effect. Use CSS for styling with box-shadow for the glow and @keyframes for the pulse animation. The component should accept props for size, color (based on deviation direction), and animation intensity. Implement different visual states: default, hover, and focused. Use SVG for the base circle and overlay for the glow effect to ensure smooth rendering. Make the component conditionally render based on the `isAnomaly` flag from the detection logic.",
+            "status": "pending",
+            "testStrategy": "Test the component rendering with various prop combinations. Verify the animation works across browsers. Test that the component correctly responds to hover and focus states."
+          },
+          {
+            "id": 3,
+            "title": "Implement Contextual Tooltip Component",
+            "description": "Create a tooltip component that displays deviation details when hovering over anomaly markers.",
+            "dependencies": [],
+            "details": "Develop a `AnomalyTooltip.jsx` component that displays formatted information about the anomaly. Position it above the data point using absolute positioning with appropriate offsets. Include the exact deviation percentage (formatted to 1 decimal place), direction indicator (up/down arrow), and classification text. Style the tooltip with a subtle drop shadow and arrow pointing to the data point. Implement enter/exit animations using CSS transitions. Handle edge cases where the tooltip might overflow the chart boundaries by dynamically adjusting its position.",
+            "status": "pending",
+            "testStrategy": "Test tooltip rendering with various anomaly data. Verify correct positioning relative to data points. Test boundary handling to ensure the tooltip remains visible when near chart edges."
+          },
+          {
+            "id": 4,
+            "title": "Integrate Markers and Tooltips with Chart Component",
+            "description": "Modify the existing revenue chart component to incorporate the anomaly markers and tooltips at the appropriate data points.",
+            "dependencies": [],
+            "details": "Update the revenue chart component to use the anomaly detection utility on the chart data. For each data point flagged as an anomaly, render the AnomalyMarker component at the corresponding coordinates. Implement mouse event handlers (onMouseEnter, onMouseLeave) to control the display of the AnomalyTooltip component. Ensure proper z-indexing so markers and tooltips appear above other chart elements. Add a legend item explaining what the anomaly markers represent. Optimize rendering to prevent performance issues when many anomalies are present.",
+            "status": "pending",
+            "testStrategy": "Test the integrated chart with various data sets containing different anomaly patterns. Verify markers appear at the correct positions. Test hover interactions to ensure tooltips display and hide appropriately. Test with screen readers to verify accessibility."
+          },
+          {
+            "id": 5,
+            "title": "Implement Accessibility Features for Anomaly Markers",
+            "description": "Enhance the anomaly markers with appropriate ARIA attributes and keyboard navigation support.",
+            "dependencies": [],
+            "details": "Add aria-labels to anomaly markers with descriptive text (e.g., \"Revenue anomaly: 23.5% increase from average\"). Implement keyboard navigation allowing users to tab through anomaly points and trigger tooltips with Enter/Space keys. Add focus indicators that are visible in high-contrast mode. Implement aria-expanded and aria-controls attributes to manage tooltip state. Create a skip link allowing keyboard users to bypass the chart if desired. Add screen reader announcements when tooltips appear using aria-live regions. Document all accessibility features in comments and project documentation.",
+            "status": "pending",
+            "testStrategy": "Test with screen readers (NVDA, JAWS, VoiceOver) to verify proper announcement of anomalies. Verify keyboard navigation works correctly. Test with high-contrast mode to ensure focus indicators remain visible. Use automated accessibility testing tools like axe to identify any remaining issues."
+          }
+        ]
+      },
+      {
+        "id": 2,
+        "title": "Add Interactive Legend Chips",
+        "description": "Implement interactive legend chips that allow users to toggle visibility of Revenue and Rolling Average series independently without causing remount jitter.",
+        "details": "Create a component for legend chips that will be displayed inline with the chart. Each chip should represent a data series (Revenue and Rolling Average) and have toggle functionality. Use state management to track visibility of each series. When a chip is clicked, update the state to show/hide the corresponding series without triggering a full chart remount. Apply smooth transitions when series are toggled. Store the user's preferences in local storage to persist across sessions. Ensure the chips have proper hover states and accessibility attributes.",
+        "testStrategy": "Unit test the legend chip component to verify toggle functionality. Test the persistence mechanism to ensure user preferences are correctly saved and retrieved. Perform UI tests to verify that toggling series doesn't cause chart remount or visual jitter. Verify accessibility compliance for the interactive elements.",
+        "priority": "medium",
+        "dependencies": [
+          1
+        ],
+        "status": "pending",
+        "subtasks": []
+      },
+      {
+        "id": 3,
+        "title": "Develop Forecast Micro-Panel",
+        "description": "Create a collapsible micro-panel showing a simple Holt-like extrapolation forecast for the next 2 months with toggle functionality.",
+        "details": "Implement a collapsible panel component that displays a 2-month revenue forecast. Use a simple Holt-like extrapolation algorithm as a placeholder for future ML forecasting. The panel should include a line chart extension showing the forecast values, clearly differentiated from historical data (e.g., dashed line or different color). Add a toggle switch to enable/disable the forecast view, with the state persisted in local storage. Include a small info icon with a tooltip explaining this is a simple extrapolation, not an ML forecast. The panel should be positioned below or beside the main revenue chart and should collapse/expand smoothly.",
+        "testStrategy": "Unit test the forecasting algorithm with known data sets to verify expected outputs. Test the toggle functionality and persistence of user preference. Verify the panel's collapse/expand animation works smoothly across browsers. Test the integration with the main chart to ensure the forecast appears as an extension of the historical data.",
+        "priority": "medium",
+        "dependencies": [
+          1,
+          2
+        ],
+        "status": "pending",
+        "subtasks": []
+      },
+      {
+        "id": 4,
+        "title": "Implement Growth Decomposition Panel",
+        "description": "Add a panel showing growth decomposition with mix shift vs pure expansion metrics and placeholder text.",
+        "details": "Create a component that breaks down revenue growth into two categories: mix shift (changes in product/service distribution) and pure expansion (overall growth). Display key metrics for each category with placeholder text explaining the concepts. Design a clean, minimal UI that presents the metrics in a scannable format. Include small trend indicators (up/down arrows) next to each metric. The panel should be collapsible and remember its state. Position it near the revenue chart for contextual relevance. Use placeholder calculations initially, with clear labeling that these are simplified representations.",
+        "testStrategy": "Test the component rendering with various data inputs. Verify the collapsible functionality works correctly. Check that placeholder text is clearly marked as such. Ensure the component is responsive and displays correctly on different screen sizes. Verify that trend indicators correctly reflect the direction of change in the metrics.",
+        "priority": "medium",
+        "dependencies": [
+          1
+        ],
+        "status": "pending",
+        "subtasks": []
+      },
+      {
+        "id": 5,
+        "title": "Develop Billing Analytics Components",
+        "description": "Create billing analytics components including DSO calculation, collection velocity sparkline, overdue concentration, and predictive risk bucket placeholder.",
+        "details": "Implement a suite of components for the Billing & Cash Lifecycle page: 1) DSO Calculator - compute Days Sales Outstanding as a synthetic calculation based on accounts receivable and average daily sales. 2) Collection Velocity Sparkline - a small inline chart showing the trend in payment collection speed. 3) Overdue Concentration - a small visualization showing the top 5 overdue accounts and their share of total overdue amount. 4) Predictive Risk Bucket - a placeholder component showing accounts categorized by risk level. Each component should be modular and include appropriate tooltips explaining the metrics. Use a consistent design language across all components. Ensure all calculations are clearly documented in the code.",
+        "testStrategy": "Unit test the DSO calculation logic with various test cases. Verify the sparkline renders correctly with different data patterns. Test the overdue concentration component with mock data to ensure correct sorting and percentage calculations. Check that all tooltips display correctly and contain helpful information. Verify responsive behavior of all components on different screen sizes.",
+        "priority": "high",
+        "dependencies": [],
+        "status": "pending",
+        "subtasks": [
+          {
+            "id": 1,
+            "title": "Implement DSO Calculator Component",
+            "description": "Create a component that calculates Days Sales Outstanding based on accounts receivable and average daily sales.",
+            "dependencies": [],
+            "details": "Develop a reusable component that calculates and displays the DSO metric. Implement the calculation logic using the formula: DSO = (Accounts Receivable / Average Daily Sales). Create a clean UI that shows the current DSO value with appropriate formatting. Add a tooltip that explains the DSO metric and how it's calculated. Include a small indicator showing whether the current DSO is improving or worsening compared to the previous period. Ensure the component handles edge cases like zero sales or missing data gracefully. Document the calculation methodology in code comments.",
+            "status": "pending",
+            "testStrategy": "Unit test the DSO calculation logic with various test cases including edge cases (zero values, negative values). Test the UI rendering with different DSO values. Verify the tooltip content is accurate and displays correctly on hover."
+          },
+          {
+            "id": 2,
+            "title": "Build Collection Velocity Sparkline Component",
+            "description": "Develop a small inline chart showing the trend in payment collection speed over time.",
+            "dependencies": [
+              "5.1"
+            ],
+            "details": "Create a sparkline component that visualizes the trend in payment collection velocity. Use a lightweight charting library or implement a custom SVG-based solution for better performance. The sparkline should show at least 7-10 data points representing recent collection periods. Implement appropriate scaling to ensure the trend is visible regardless of data range. Add a tooltip that shows the exact value when hovering over data points. Include a visual indicator (color or icon) showing if the overall trend is positive or negative. Ensure the component is responsive and maintains proper aspect ratio at different screen sizes.",
+            "status": "pending",
+            "testStrategy": "Test the sparkline rendering with various data patterns (increasing, decreasing, fluctuating). Verify the component scales appropriately at different sizes. Test the hover functionality to ensure tooltips display correct values. Check that the trend indicator accurately reflects the data pattern."
+          },
+          {
+            "id": 3,
+            "title": "Create Overdue Concentration Visualization",
+            "description": "Implement a visualization showing the top 5 overdue accounts and their share of total overdue amount.",
+            "dependencies": [
+              "5.1"
+            ],
+            "details": "Develop a component that displays the top 5 overdue accounts and visualizes their proportion of the total overdue amount. Use a horizontal bar chart or similar visualization that clearly shows the relative size of each overdue account. Include account names, overdue amounts, and percentage of total for each entry. Implement sorting functionality to display accounts in descending order by overdue amount. Add a summary showing the total overdue amount and what percentage the top 5 represent of all overdue accounts. Use consistent color coding that aligns with the overall design language. Ensure the component handles cases where there are fewer than 5 overdue accounts.",
+            "status": "pending",
+            "testStrategy": "Test the component with mock data to verify correct sorting and percentage calculations. Verify the visualization accurately represents the proportions. Test edge cases such as having fewer than 5 overdue accounts or accounts with identical amounts. Check that all text elements are properly truncated if account names are too long."
+          },
+          {
+            "id": 4,
+            "title": "Develop Predictive Risk Bucket Placeholder",
+            "description": "Create a placeholder component that categorizes accounts by risk level for future predictive analytics integration.",
+            "dependencies": [
+              "5.3"
+            ],
+            "details": "Implement a placeholder component for the future predictive risk categorization feature. Create a simple UI that groups accounts into risk buckets (e.g., Low, Medium, High, Critical). For this placeholder version, use basic heuristics to categorize accounts based on factors like days overdue and payment history. Design the component to be easily replaced with actual ML-based predictions in the future. Include clear visual differentiation between risk levels using appropriate colors and icons. Add a disclaimer tooltip indicating this is currently using simplified logic and will be enhanced with predictive analytics in the future. Ensure the component layout can accommodate the eventual addition of confidence scores or prediction metrics.",
+            "status": "pending",
+            "testStrategy": "Test the risk categorization logic with various account scenarios. Verify the visual representation clearly distinguishes between risk levels. Test the disclaimer tooltip functionality. Ensure the component gracefully handles edge cases like accounts with insufficient data for categorization."
+          }
+        ]
+      },
+      {
+        "id": 6,
+        "title": "Implement Feature Flag Management in Settings",
+        "description": "Create a feature flag management interface in the Settings page with persistent local storage and dependency note tooltips.",
+        "details": "Develop a feature flag management component for the Settings page. Create a UI that lists available feature flags with toggle switches. Implement local storage persistence to save user preferences. Add dependency tooltips that show which features depend on each flag, appearing when hovering over an info icon next to each flag. The UI should include a brief description of each feature flag and its current state. Group related flags together for better organization. Include a reset button to restore default settings. Ensure the UI is accessible with proper keyboard navigation and screen reader support.",
+        "testStrategy": "Test the toggle functionality for each feature flag. Verify that changes are correctly persisted to local storage. Test the dependency tooltips to ensure they display accurate information. Check that the reset functionality correctly restores default settings. Verify accessibility compliance for all interactive elements. Test with various combinations of enabled/disabled flags to ensure the application responds correctly.",
+        "priority": "medium",
+        "dependencies": [],
+        "status": "pending",
+        "subtasks": []
+      },
+      {
+        "id": 7,
+        "title": "Create Audit Log Preview in Settings",
+        "description": "Implement an audit log preview stub in the Settings page showing recent user actions and system events.",
+        "details": "Develop an audit log preview component for the Settings page. Create a UI that displays a paginated list of recent actions and events with timestamps, event types, and brief descriptions. This will be a stub implementation with placeholder data for now. Include filtering options by event type and date range. Design the UI with a clean, scannable table or list format. Add an export button (non-functional in this phase) to suggest future functionality. Implement infinite scroll or pagination for better performance with large logs. Include a clear indication that this is a preview feature.",
+        "testStrategy": "Test the rendering of the audit log with various mock data sets. Verify that filtering controls work correctly. Test pagination or infinite scroll functionality. Check that the UI is responsive and displays well on different screen sizes. Verify that the placeholder nature of the feature is clearly communicated to users.",
+        "priority": "low",
+        "dependencies": [
+          6
+        ],
+        "status": "pending",
+        "subtasks": []
+      },
+      {
+        "id": 8,
+        "title": "Implement AI Context Enrichment",
+        "description": "Enhance the AI assistant by injecting relevant financial context data into the AI context object.",
+        "details": "Modify the existing AI assistant integration to include enriched context data. Create a context object that includes: channel mix percentages, aging distribution of accounts, last 6 detected anomalies with descriptions, summary of last 6 invoices, synthetic forecast values, and key financial ratios (ARR growth, Net $ retention, churn trend slope). Implement a context builder function that gathers this data from various parts of the application and formats it for the AI. Ensure the context is updated whenever relevant data changes. Add logging to track which context elements are being used in AI responses. Structure the context object in a way that makes it easy for the AI to reference specific data points in its responses.",
+        "testStrategy": "Unit test the context builder function with mock data to verify it correctly formats all required information. Test the integration with the AI service using sample queries to ensure the context is being properly utilized. Verify that context updates trigger correctly when underlying data changes. Test with various combinations of available/missing data to ensure graceful handling of incomplete information.",
+        "priority": "high",
+        "dependencies": [
+          1,
+          3,
+          5
+        ],
+        "status": "pending",
+        "subtasks": []
+      },
+      {
+        "id": 9,
+        "title": "Implement User Preference Persistence",
+        "description": "Extend the existing persistence mechanism to store additional user preferences including legend toggles and forecast opt-in flag.",
+        "details": "Enhance the existing user preference storage system to include additional settings: visibility state of each legend item, forecast display preference, and feature flag settings. Use local storage for persistence. Create a unified preferences manager that handles reading, writing, and providing defaults for all user preferences. Implement a migration strategy for users with existing preferences. Add versioning to the stored preferences to facilitate future updates. Ensure all preference-related operations are non-blocking and handle storage errors gracefully. Create a simple API for other components to access and update preferences.",
+        "testStrategy": "Unit test the preferences manager with various combinations of settings. Test the migration logic with mock legacy preference data. Verify that preferences are correctly persisted across page reloads. Test error handling by simulating storage failures. Verify that default values are correctly applied when preferences are missing. Test the performance impact of preference operations to ensure they don't cause UI lag.",
+        "priority": "medium",
+        "dependencies": [
+          2,
+          3,
+          6
+        ],
+        "status": "pending",
+        "subtasks": []
+      },
+      {
+        "id": 10,
+        "title": "Implement Progressive Disclosure UI Pattern",
+        "description": "Apply progressive disclosure patterns to prevent UI clutter, including compact chips and collapsible panels.",
+        "details": "Refactor the UI components to implement progressive disclosure patterns: 1) Convert existing panels to be collapsible with smooth animations. 2) Create compact chip components that can expand to show more detail on hover/click. 3) Implement an information density preference that allows users to choose between compact and expanded views. 4) Add subtle visual cues to indicate when more information is available. Ensure all interactive elements have appropriate hover states and focus indicators. Use consistent animation timing across all expandable elements. Maintain the state of expanded/collapsed elements in the user preferences.",
+        "testStrategy": "Test the collapse/expand functionality of all panels. Verify that compact chips correctly display additional information when activated. Test the information density preference to ensure it correctly affects the UI. Verify that all animations run smoothly across different browsers. Test keyboard navigation for all interactive elements. Verify that the state of expanded/collapsed elements persists correctly.",
+        "priority": "medium",
+        "dependencies": [
+          1,
+          2,
+          3,
+          4,
+          5,
+          9
+        ],
+        "status": "pending",
+        "subtasks": []
+      },
+      {
+        "id": 11,
+        "title": "Implement Accessibility Enhancements",
+        "description": "Ensure all new UI elements are accessible with appropriate ARIA attributes, keyboard navigation, and screen reader support.",
+        "details": "Audit all new components for accessibility compliance: 1) Add appropriate ARIA attributes to all interactive elements. 2) Ensure anomaly markers have aria-labels with deviation summaries. 3) Implement keyboard navigation for all interactive components. 4) Test and enhance screen reader compatibility. 5) Ensure sufficient color contrast for all text and UI elements. 6) Add skip links for keyboard users. 7) Implement focus management for modals and expandable panels. Document accessibility features in the codebase for future reference. Create helper functions for common accessibility patterns to ensure consistency.",
+        "testStrategy": "Use automated accessibility testing tools (like axe) to identify issues. Manually test with screen readers on multiple browsers. Verify keyboard navigation works for all interactive elements. Test color contrast with simulation tools for various types of color vision deficiencies. Conduct a full keyboard navigation test of the entire application flow. Verify that all dynamic content changes are properly announced to screen readers.",
+        "priority": "high",
+        "dependencies": [
+          1,
+          2,
+          3,
+          4,
+          5,
+          6,
+          7,
+          10
+        ],
+        "status": "pending",
+        "subtasks": []
+      },
+      {
+        "id": 12,
+        "title": "Perform Integration Testing and Bug Fixes",
+        "description": "Conduct comprehensive integration testing across all enhanced pages and components, fixing any bugs or inconsistencies.",
+        "details": "Perform end-to-end testing of the entire enhanced dashboard: 1) Verify all components work together without conflicts. 2) Test data flow between components. 3) Check for memory leaks during extended use. 4) Verify performance with realistic data volumes. 5) Test all user interaction paths. 6) Ensure consistent styling across all new and existing components. 7) Verify that all success criteria from the PRD are met. Document any bugs found and implement fixes. Pay special attention to edge cases and error handling. Create a test report documenting coverage and results.",
+        "testStrategy": "Develop automated integration tests covering key user flows. Manually test all pages with various data scenarios. Use performance monitoring tools to identify bottlenecks. Test on multiple browsers and screen sizes. Verify that all success criteria from the PRD are met with specific test cases for each criterion. Conduct user acceptance testing with stakeholders if possible.",
+        "priority": "high",
+        "dependencies": [
+          1,
+          2,
+          3,
+          4,
+          5,
+          6,
+          7,
+          8,
+          9,
+          10,
+          11
+        ],
+        "status": "pending",
+        "subtasks": []
+      }
+    ],
+    "metadata": {
+      "created": "2025-08-26T03:18:25.166Z",
+      "updated": "2025-08-26T03:18:25.166Z",
+      "description": "Tasks for master context"
+    }
+  }
+}
